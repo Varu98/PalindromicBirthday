@@ -1,6 +1,7 @@
 const bday = document.querySelector("#bday");
 const btn = document.querySelector(".btn-s");
 const form = document.querySelector("#form");
+const output = document.querySelector(".ouput");
 
 //no of excercises 8
 
@@ -8,8 +9,44 @@ form.addEventListener("submit", onSubmit);
 
 function onSubmit(e) {
   e.preventDefault();
-}
 
+  if (bday.value !== "") {
+    var date = bday.value.split("-");
+    var yyyy = date[0];
+    var mm = date[1];
+    var dd = date[2];
+
+    var date = {
+      day: Number(dd),
+      month: Number(mm),
+      year: Number(yyyy),
+    };
+
+    var dateStr = dateToString(date);
+    var list = palindromeCheckLoop(dateStr);
+    var isPalindrome = false;
+
+    for (let i = 0; i < list.length; i++) {
+      if (list[i]) {
+        isPalindrome = true;
+        break;
+      }
+    }
+
+    if (!isPalindrome) {
+      const [ctr1, nextDate] = nextDatePalindrome(date);
+      const [ctr2, prevDate] = previousDatePalindrome(date);
+
+      if (ctr1 > ctr2) {
+        resultDiv.innerText = `The nearest palindrome date is ${prevDate.day}-${prevDate.month}-${prevDate.year}, you missed by ${ctr2} days.`;
+      } else {
+        resultDiv.innerText = `The nearest palindrome date is ${nextDate.day}-${nextDate.month}-${nextDate.year}, you missed by ${ctr1} days.`;
+      }
+    } else {
+      resultDiv.innerText = "Yay! Your birthday is palindrome!";
+    }
+  }
+}
 //excercise 1
 //  Write a function in JS that takes a string and reverses it
 
@@ -99,11 +136,11 @@ function getNextDate(date) {
       if (day > 29) {
         day = 1;
         month = 3;
-      } else {
-        if (day > 28) {
-          day = 1;
-          month = 3;
-        }
+      }
+    } else {
+      if (day > 28) {
+        day = 1;
+        month = 3;
       }
     }
   } else {
@@ -124,10 +161,76 @@ function getNextDate(date) {
   };
 }
 
-function nextDatePalindrome(date) {}
+function nextDatePalindrome(date) {
+  var nextDate = getNextDate(date);
+  var ctr = 0;
 
-var date = { day: 11, month: 23, year: 1998 };
+  while (1) {
+    ctr++;
 
-var dateStr = dateToString(date);
+    var dateStr = dateToString(nextDate);
+    var resultList = palindromeCheckLoop(dateStr);
 
-console.log(palindromeCheckLoop(dateStr));
+    for (let i = 0; i < resultList.length; i++) {
+      if (resultList[i]) {
+        return [ctr, nextDate];
+      }
+    }
+    nextDate = getNextDate(nextDate);
+  }
+}
+
+function getPreviousDate(date) {
+  var day = date.day - 1;
+  var month = date.month;
+  var year = date.year;
+
+  var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+  if (day === 0) {
+    month--;
+
+    if (month === 0) {
+      month = 12;
+      day = 31;
+      year--;
+    } else if (month === 2) {
+      if (isLeapYear(year)) {
+        day = 29;
+      } else {
+        day = 28;
+      }
+    } else {
+      day = daysInMonth[month - 1];
+    }
+  }
+
+  return {
+    day: day,
+    month: month,
+    year: year,
+  };
+}
+
+function previousDatePalindrome(date) {
+  var previousDate = getPreviousDate(date);
+  var ctr = 0;
+
+  while (1) {
+    ctr++;
+
+    var dateStr = dateToString(previousDate);
+    var resultList = palindromeCheckLoop(dateStr);
+
+    for (let i = 0; i < resultList.length; i++) {
+      if (resultList[i]) {
+        return [ctr, nextDate];
+      }
+    }
+    previousDate = getPreviousDate(getPreviousDate);
+  }
+}
+
+var date = { day: 5, month: 1, year: 2020 };
+
+console.log(nextDatePalindrome(date));
