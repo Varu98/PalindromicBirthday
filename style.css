@@ -1,4 +1,43 @@
+* {
+  margin: 0;
+}
+
 body {
   color: #bfbfbf;
   background-color: #1d2333;
+  font-family: "Ubuntu Mono", monospace;
+  text-align: center;
+}
+
+.header {
+  color: #fff;
+  padding: 80px;
+  background-color: cornflowerblue;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+label {
+  font-size: 1.5rem;
+}
+input {
+  margin: 2rem;
+  padding: 1rem 3rem;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+button {
+  padding: 1rem 3rem;
+  border-radius: 10px;
+  border: none;
+  font-size: 1.5rem;
+  color: #fff;
+  background-color: cornflowerblue;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+#form {
+  margin-top: 10%;
 }
